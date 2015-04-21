@@ -117,15 +117,16 @@ public class Checkers extends JFrame {
                             (rowSelected1 == mouseY2 + 1 && colSelected1 == mouseX2 + 1) 
                             || (rowSelected1 == mouseY2 - 1 && colSelected1 == mouseX2 - 1) 
                             || (rowSelected1 == mouseY2 - 1 && colSelected1 == mouseX2 + 1) 
-                            || (rowSelected1 == mouseY2 + 1 && colSelected1 == mouseX2 - 1) 
-                            && board[rowSelected1][colSelected1] == Seed.EMPTY) {
+                            || (rowSelected1 == mouseY2 + 1 && colSelected1 == mouseX2 - 1)) {
                         if((rowSelected1 == mouseY2 + 1 && colSelected1 == mouseX2 + 1) && board[rowSelected1][colSelected1] == idlePlayer) {
                             rowJump = mouseY2 + 2;
                             colJump = mouseX2 + 2;
                             if(board[rowJump][colJump] == idlePlayer) {
                                 board[mouseY2][mouseX2] = currentPlayer;
+                                System.out.println("Failed down/right jump");
                             }
                             else {
+                                System.out.println("Successful down/right jump");
                                 board[rowSelected1][colSelected1] = Seed.EMPTY;
                                 board[rowJump][colJump] = currentPlayer;
                                 updateGame(currentPlayer, rowJump, colJump);
@@ -138,8 +139,10 @@ public class Checkers extends JFrame {
                             colJump = mouseX2 - 2;
                             if(board[rowJump][colJump] == idlePlayer) {
                                 board[mouseY2][mouseX2] = currentPlayer;
+                                System.out.println("Failed up/left jump");
                             }
                             else {
+                                System.out.println("Successful up/left jump");
                                 board[rowSelected1][colSelected1] = Seed.EMPTY;
                                 board[rowJump][colJump] = currentPlayer;
                                 updateGame(currentPlayer, rowJump, colJump);
@@ -152,8 +155,10 @@ public class Checkers extends JFrame {
                             colJump = mouseX2 + 2;
                             if(board[rowJump][colJump] == idlePlayer) {
                                 board[mouseY2][mouseX2] = currentPlayer;
+                                System.out.println("Failed up/right jump");
                             }
                             else {
+                                System.out.println("Successful up/right jump");
                                 board[rowSelected1][colSelected1] = Seed.EMPTY;
                                 board[rowJump][colJump] = currentPlayer;
                                 updateGame(currentPlayer, rowJump, colJump);
@@ -166,8 +171,10 @@ public class Checkers extends JFrame {
                             colJump = mouseX2 - 2;
                             if(board[rowJump][colJump] == idlePlayer) {
                                 board[mouseY2][mouseX2] = currentPlayer;
+                                System.out.println("Failed down/left jump");
                             }
                             else {
+                                System.out.println("Successful down/left jump");
                                 board[rowSelected1][colSelected1] = Seed.EMPTY;
                                 board[rowJump][colJump] = currentPlayer;
                                 updateGame(currentPlayer, rowJump, colJump);
@@ -281,7 +288,6 @@ public class Checkers extends JFrame {
         return true;
     }
     public Seed hasWon (Seed theSeed, int rowSelected, int colSelected) {
-        //TODO: Modify hasWon to be a victory for the game "Checkers," not Tic-Tac-Toe
         int countRed = 0;
         int countBlue = 0;
         for(row = 0; row <= 7; row++) {
@@ -315,19 +321,6 @@ public class Checkers extends JFrame {
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
             setBackground(Color.BLACK);
-
-            /*g.setColor(Color.WHITE);
-                for (int cell = 0; cell < CELL; ++cell) {
-                    g.fillRect(CELL_SIZE * cell, CELL_SIZE * cell, CELL_SIZE, CELL_SIZE); //PAINTS CELLS BLUE, DIAGONAL FROM TOP LEFT CORNER TO LOWER RIGHT CORNER.
-                    g.fillRect((80*2) + CELL_SIZE * cell, CELL_SIZE * cell, CELL_SIZE, CELL_SIZE); //PAINTS CELL BLUE, DIAGONAL FROM TOP LEFT (TWO TO THE RIGHT) TO BOTTOM
-                    g.fillRect((80*4) + CELL_SIZE * cell, CELL_SIZE * cell, CELL_SIZE, CELL_SIZE);
-                    g.fillRect((80*6) + CELL_SIZE * cell, CELL_SIZE * cell, CELL_SIZE, CELL_SIZE);
-                    g.fillRect((80*8) + CELL_SIZE * cell, CELL_SIZE * cell, CELL_SIZE, CELL_SIZE);
-                    g.fillRect(CELL_SIZE * cell, (80*2) + CELL_SIZE * cell, CELL_SIZE, CELL_SIZE); //PAINTS CELL BLUE, DIAGONAL FROM TOP LEFT (TWO TO THE LEFT/DOWN) TO BOTTOM
-                    g.fillRect(CELL_SIZE * cell, (80*4) + CELL_SIZE * cell, CELL_SIZE, CELL_SIZE);
-                    g.fillRect(CELL_SIZE * cell, (80*6) + CELL_SIZE * cell, CELL_SIZE, CELL_SIZE);
-                    g.fillRect(CELL_SIZE * cell, (80*8) + CELL_SIZE * cell, CELL_SIZE, CELL_SIZE); //LINES 163-178 COMPLETED ON TUESDAY, MARCH 31st 2015
-                }*/
             Graphics2D g2d = (Graphics2D)g;
             g2d.setStroke(new BasicStroke(SYMBOL_STROKE_WIDTH, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
             for (int row = 0; row < ROWS; ++row) {
