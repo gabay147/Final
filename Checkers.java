@@ -39,7 +39,7 @@ public class Checkers extends JFrame {
     private GameState currentState;
 
     public enum Seed {
-        EMPTY, RED, BLUE;
+        EMPTY, RED, BLUE, RED_KING, BLUE_KING;
     }
 
     private Seed currentPlayer;
@@ -119,46 +119,61 @@ public class Checkers extends JFrame {
                             || (rowSelected1 == mouseY2 - 1 && colSelected1 == mouseX2 + 1) 
                             || (rowSelected1 == mouseY2 + 1 && colSelected1 == mouseX2 - 1) 
                             && board[rowSelected1][colSelected1] == Seed.EMPTY) {
-                        if((rowSelected1 == mouseY2 + 1 && colSelected1 == mouseX2 + 1) &&board[rowSelected1][colSelected1] == idlePlayer) {
-                            board[rowSelected1][colSelected1] = Seed.EMPTY;
+                        if((rowSelected1 == mouseY2 + 1 && colSelected1 == mouseX2 + 1) && board[rowSelected1][colSelected1] == idlePlayer) {
                             rowJump = mouseY2 + 2;
                             colJump = mouseX2 + 2;
-                            board[rowJump][colJump] = currentPlayer;
-                            updateGame(currentPlayer, rowJump, colJump);
-                            System.out.println("down right move hit........");
-                            currentPlayer = (currentPlayer == Seed.RED) ? Seed.BLUE : Seed.RED;
-                            idlePlayer = (currentPlayer == Seed.BLUE) ? Seed.RED : Seed.BLUE;
+                            if(board[rowJump][colJump] == idlePlayer) {
+                                board[mouseY2][mouseX2] = currentPlayer;
+                            }
+                            else {
+                                board[rowSelected1][colSelected1] = Seed.EMPTY;
+                                board[rowJump][colJump] = currentPlayer;
+                                updateGame(currentPlayer, rowJump, colJump);
+                                currentPlayer = (currentPlayer == Seed.RED) ? Seed.BLUE : Seed.RED;
+                                idlePlayer = (currentPlayer == Seed.BLUE) ? Seed.RED : Seed.BLUE;
+                            }
                         }
-                        //TODO: Fix this if statement, piece does not move if trying to jump opponent in the upper right direction
                         else if ((rowSelected1 == mouseY2 - 1 && colSelected1 == mouseX2 - 1) && board[rowSelected1][colSelected1] == idlePlayer) {
-                            board[rowSelected1][colSelected1] = Seed.EMPTY;
                             rowJump = mouseY2 - 2;
                             colJump = mouseX2 - 2;
-                            board[rowJump][colJump] = currentPlayer;
-                            updateGame(currentPlayer, rowJump, colJump);
-                            System.out.println("up left move hit...");
-                            currentPlayer = (currentPlayer == Seed.RED) ? Seed.BLUE : Seed.RED;
-                            idlePlayer = (currentPlayer == Seed.BLUE) ? Seed.RED : Seed.BLUE;
+                            if(board[rowJump][colJump] == idlePlayer) {
+                                board[mouseY2][mouseX2] = currentPlayer;
+                            }
+                            else {
+                                board[rowSelected1][colSelected1] = Seed.EMPTY;
+                                board[rowJump][colJump] = currentPlayer;
+                                updateGame(currentPlayer, rowJump, colJump);
+                                currentPlayer = (currentPlayer == Seed.RED) ? Seed.BLUE : Seed.RED;
+                                idlePlayer = (currentPlayer == Seed.BLUE) ? Seed.RED : Seed.BLUE;
+                            }
                         }
                         else if ((rowSelected1 == mouseY2 - 1 && colSelected1 == mouseX2 + 1) && board[rowSelected1][colSelected1] == idlePlayer) {
-                            board[rowSelected1][colSelected1] = Seed.EMPTY;
                             rowJump = mouseY2 - 2;
                             colJump = mouseX2 + 2;
-                            board[rowJump][colJump] = currentPlayer;
-                            updateGame(currentPlayer, rowJump, colJump);
-                            System.out.println("up right move hit................");
-                            currentPlayer = (currentPlayer == Seed.RED) ? Seed.BLUE : Seed.RED;
-                            idlePlayer = (currentPlayer == Seed.BLUE) ? Seed.RED : Seed.BLUE;
+                            if(board[rowJump][colJump] == idlePlayer) {
+                                board[mouseY2][mouseX2] = currentPlayer;
+                            }
+                            else {
+                                board[rowSelected1][colSelected1] = Seed.EMPTY;
+                                board[rowJump][colJump] = currentPlayer;
+                                updateGame(currentPlayer, rowJump, colJump);
+                                currentPlayer = (currentPlayer == Seed.RED) ? Seed.BLUE : Seed.RED;
+                                idlePlayer = (currentPlayer == Seed.BLUE) ? Seed.RED : Seed.BLUE;
+                            }
                         }
                         else if ((rowSelected1 == mouseY2 + 1 && colSelected1 == mouseX2 - 1) && board[rowSelected1][colSelected1] == idlePlayer) {
-                            board[rowSelected1][colSelected1] = Seed.EMPTY;
                             rowJump = mouseY2 + 2;
                             colJump = mouseX2 - 2;
-                            board[rowJump][colJump] = currentPlayer;
-                            updateGame(currentPlayer, rowJump, colJump);
-                            System.out.println("down left move hit........");
-                            currentPlayer = (currentPlayer == Seed.RED) ? Seed.BLUE : Seed.RED;
-                            idlePlayer = (currentPlayer == Seed.BLUE) ? Seed.RED : Seed.BLUE;
+                            if(board[rowJump][colJump] == idlePlayer) {
+                                board[mouseY2][mouseX2] = currentPlayer;
+                            }
+                            else {
+                                board[rowSelected1][colSelected1] = Seed.EMPTY;
+                                board[rowJump][colJump] = currentPlayer;
+                                updateGame(currentPlayer, rowJump, colJump);
+                                currentPlayer = (currentPlayer == Seed.RED) ? Seed.BLUE : Seed.RED;
+                                idlePlayer = (currentPlayer == Seed.BLUE) ? Seed.RED : Seed.BLUE;
+                            }
                         }
                         else{
                         board[rowSelected1][colSelected1] = currentPlayer;
