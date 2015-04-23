@@ -20,18 +20,6 @@ import javax.swing.SwingUtilities;
 public class Checkers extends JFrame {
     private static final long serialVersionUID = 1L;
 
-    public static final int ROWS = 8;
-    public static final int COLS = 8;
-    public static final int CELL = 8;
-    public static final int CELL_SIZE = 80;
-    public static final int CANVAS_WIDTH = CELL_SIZE * COLS;
-    public static final int CANVAS_HEIGHT = CELL_SIZE * ROWS;
-    public static final int GRID_WIDTH = 8;
-    public static final int GRID_WIDTH_HALF = GRID_WIDTH / 2;
-    public static final int CELL_PADDING = CELL_SIZE / 6;
-    public static final int SYMBOL_SIZE = CELL_SIZE - CELL_PADDING * 2;
-    public static final int SYMBOL_STROKE_WIDTH = 8;
-
     public enum GameState {
         PLAYING, DRAW, RED_WON, BLUE_WON;
     }
@@ -70,8 +58,7 @@ public class Checkers extends JFrame {
 
     public Checkers() {
         canvas = new DrawCanvas();
-        canvas.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
-
+        canvas.setPreferredSize(new Dimension(640, 640));
 
         canvas.addMouseListener(new MouseAdapter() {
             @Override
@@ -79,27 +66,32 @@ public class Checkers extends JFrame {
                 int mouseX = remove.getX();
                 int mouseY = remove.getY();
 
-                int rowSelected = mouseY / CELL_SIZE;
-                int colSelected = mouseX / CELL_SIZE;
+                int rowSelected = mouseY / 80;
+                int colSelected = mouseX / 80;
 
                 if (currentState == GameState.PLAYING) {
-                    if (rowSelected >= 0 && rowSelected < ROWS && colSelected >= 0 && colSelected < COLS && board[rowSelected][colSelected] == currentPlayer) {
+                    if (rowSelected >= 0 && rowSelected < 8 && colSelected >= 0
+                            && colSelected < 8 &&
+                            board[rowSelected][colSelected] == currentPlayer) {
                         board[rowSelected][colSelected] = Seed.EMPTY;
                         setRow(rowSelected);
                         setCol(colSelected);
                         repaint();
                     }
-                    else if (rowSelected >= 0 && rowSelected < ROWS && colSelected >= 0 && colSelected < COLS && board[rowSelected][colSelected] == idlePlayer) {
+                    else if (rowSelected >= 0 && rowSelected < 8 && colSelected
+                            >= 0 && colSelected < 8 &&
+                            board[rowSelected][colSelected] == idlePlayer) {
                         board[rowSelected][colSelected] = idlePlayer;
                     }
-                    else if (rowSelected >= 0 && rowSelected < ROWS && colSelected >= 0 && colSelected < COLS && board[rowSelected][colSelected] == Seed.EMPTY) {
+                    else if (rowSelected >= 0 && rowSelected < 8 && colSelected
+                            >= 0 && colSelected < 8 &&
+                            board[rowSelected][colSelected] == Seed.EMPTY) {
                         board[rowSelected][colSelected] = Seed.EMPTY;
                     }
-
                 }
-                
             }
         });
+        
         canvas.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent place) {
@@ -107,13 +99,13 @@ public class Checkers extends JFrame {
                 int mouseY1 = place.getY();
                 int mouseY2 = getRow();
                 int mouseX2 = getCol();
-                int rowSelected1 = mouseY1 / CELL_SIZE;
-                int colSelected1 = mouseX1 / CELL_SIZE;
+                int rowSelected1 = mouseY1 / 80;
+                int colSelected1 = mouseX1 / 80;
                 int rowJump;
                 int colJump;
 
                 if (currentState == GameState.PLAYING) {
-                    if (rowSelected1 >= 0 && rowSelected1 < ROWS && colSelected1 >= 0 && colSelected1 < COLS && 
+                    if (rowSelected1 >= 0 && rowSelected1 < 8 && colSelected1 >= 0 && colSelected1 < 8 && 
                             (rowSelected1 == mouseY2 + 1 && colSelected1 == mouseX2 + 1) 
                             || (rowSelected1 == mouseY2 - 1 && colSelected1 == mouseX2 - 1) 
                             || (rowSelected1 == mouseY2 - 1 && colSelected1 == mouseX2 + 1) 
@@ -121,11 +113,11 @@ public class Checkers extends JFrame {
                         if((rowSelected1 == mouseY2 + 1 && colSelected1 == mouseX2 + 1) && board[rowSelected1][colSelected1] == idlePlayer) {
                             rowJump = mouseY2 + 2;
                             colJump = mouseX2 + 2;
-                            if(board[rowJump][colJump] == idlePlayer) {
+                            
+                            if(board[rowJump][colJump] == idlePlayer || board[rowJump][colJump] == currentPlayer) {
                                 board[mouseY2][mouseX2] = currentPlayer;
                                 System.out.println("Failed down/right jump");
-                            }
-                            else {
+                            } else {
                                 System.out.println("Successful down/right jump");
                                 board[rowSelected1][colSelected1] = Seed.EMPTY;
                                 board[rowJump][colJump] = currentPlayer;
@@ -133,15 +125,14 @@ public class Checkers extends JFrame {
                                 currentPlayer = (currentPlayer == Seed.RED) ? Seed.BLUE : Seed.RED;
                                 idlePlayer = (currentPlayer == Seed.BLUE) ? Seed.RED : Seed.BLUE;
                             }
-                        }
-                        else if ((rowSelected1 == mouseY2 - 1 && colSelected1 == mouseX2 - 1) && board[rowSelected1][colSelected1] == idlePlayer) {
+                        } else if ((rowSelected1 == mouseY2 - 1 && colSelected1 == mouseX2 - 1) && board[rowSelected1][colSelected1] == idlePlayer) {
                             rowJump = mouseY2 - 2;
                             colJump = mouseX2 - 2;
-                            if(board[rowJump][colJump] == idlePlayer) {
+                            
+                            if(board[rowJump][colJump] == idlePlayer || board[rowJump][colJump] == currentPlayer) {
                                 board[mouseY2][mouseX2] = currentPlayer;
                                 System.out.println("Failed up/left jump");
-                            }
-                            else {
+                            } else {
                                 System.out.println("Successful up/left jump");
                                 board[rowSelected1][colSelected1] = Seed.EMPTY;
                                 board[rowJump][colJump] = currentPlayer;
@@ -149,15 +140,14 @@ public class Checkers extends JFrame {
                                 currentPlayer = (currentPlayer == Seed.RED) ? Seed.BLUE : Seed.RED;
                                 idlePlayer = (currentPlayer == Seed.BLUE) ? Seed.RED : Seed.BLUE;
                             }
-                        }
-                        else if ((rowSelected1 == mouseY2 - 1 && colSelected1 == mouseX2 + 1) && board[rowSelected1][colSelected1] == idlePlayer) {
+                        } else if ((rowSelected1 == mouseY2 - 1 && colSelected1 == mouseX2 + 1) && board[rowSelected1][colSelected1] == idlePlayer) {
                             rowJump = mouseY2 - 2;
                             colJump = mouseX2 + 2;
-                            if(board[rowJump][colJump] == idlePlayer) {
+                            
+                            if(board[rowJump][colJump] == idlePlayer || board[rowJump][colJump] == currentPlayer) {
                                 board[mouseY2][mouseX2] = currentPlayer;
                                 System.out.println("Failed up/right jump");
-                            }
-                            else {
+                            } else {
                                 System.out.println("Successful up/right jump");
                                 board[rowSelected1][colSelected1] = Seed.EMPTY;
                                 board[rowJump][colJump] = currentPlayer;
@@ -165,15 +155,14 @@ public class Checkers extends JFrame {
                                 currentPlayer = (currentPlayer == Seed.RED) ? Seed.BLUE : Seed.RED;
                                 idlePlayer = (currentPlayer == Seed.BLUE) ? Seed.RED : Seed.BLUE;
                             }
-                        }
-                        else if ((rowSelected1 == mouseY2 + 1 && colSelected1 == mouseX2 - 1) && board[rowSelected1][colSelected1] == idlePlayer) {
+                        } else if ((rowSelected1 == mouseY2 + 1 && colSelected1 == mouseX2 - 1) && board[rowSelected1][colSelected1] == idlePlayer) {
                             rowJump = mouseY2 + 2;
                             colJump = mouseX2 - 2;
-                            if(board[rowJump][colJump] == idlePlayer) {
+                            
+                            if(board[rowJump][colJump] == idlePlayer || board[rowJump][colJump] == currentPlayer) {
                                 board[mouseY2][mouseX2] = currentPlayer;
                                 System.out.println("Failed down/left jump");
-                            }
-                            else {
+                            } else {
                                 System.out.println("Successful down/left jump");
                                 board[rowSelected1][colSelected1] = Seed.EMPTY;
                                 board[rowJump][colJump] = currentPlayer;
@@ -181,24 +170,20 @@ public class Checkers extends JFrame {
                                 currentPlayer = (currentPlayer == Seed.RED) ? Seed.BLUE : Seed.RED;
                                 idlePlayer = (currentPlayer == Seed.BLUE) ? Seed.RED : Seed.BLUE;
                             }
-                        }
-                        else{
-                        board[rowSelected1][colSelected1] = currentPlayer;
-                        updateGame(currentPlayer, rowSelected1, colSelected1);
+                        } else {
+                            board[rowSelected1][colSelected1] = currentPlayer;
+                            updateGame(currentPlayer, rowSelected1, colSelected1);
                         
-
-                        currentPlayer = (currentPlayer == Seed.RED) ? Seed.BLUE : Seed.RED;
-                        idlePlayer = (currentPlayer == Seed.BLUE) ? Seed.RED : Seed.BLUE;
+                            currentPlayer = (currentPlayer == Seed.RED) ? Seed.BLUE : Seed.RED;
+                            idlePlayer = (currentPlayer == Seed.BLUE) ? Seed.RED : Seed.BLUE;
                         }
                         
-                    }
-                    else {
+                    } else {
                         board[mouseY2][mouseX2] = currentPlayer;
                     }
                 } else {
                     initGame();
                 }
-
                 repaint();
             }
         });
@@ -217,23 +202,26 @@ public class Checkers extends JFrame {
 
         setTitle("Checkers");
         setVisible(true);
-        board = new Seed[ROWS][COLS];
+        board = new Seed[8][8];
 
         initGame();
-    } 
+    }
+    
     public void initGame() {
-        for (int row = 0; row < ROWS; ++row) {
-            for (int col = 0; col < COLS; ++col) {
+        for (int row = 0; row < 8; ++row) {
+            for (int col = 0; col < 8; ++col) {
                 if(row % 2 == 0) {
                     if(col % 2 == 0) {
                         board[row][col] = Seed.EMPTY;
                     }
                 }
+                
                 if(row % 2 == 1){
                     if (col % 2 == 1) {
                         board[row][col] = Seed.EMPTY;
                     }
                 }
+                
                 board[0][0] = Seed.RED;
                 board[0][2] = Seed.RED;
                 board[0][4] = Seed.RED;
@@ -268,8 +256,8 @@ public class Checkers extends JFrame {
         currentState = GameState.PLAYING;
         currentPlayer = Seed.RED;
         idlePlayer = Seed.BLUE;
-
     }
+    
     public void updateGame(Seed theSeed, int rowSelected, int colSelected) {
         if (hasWon(theSeed, rowSelected, colSelected) == Seed.RED) {
             currentState = GameState.RED_WON;
@@ -277,9 +265,10 @@ public class Checkers extends JFrame {
             currentState = GameState.BLUE_WON;
         }
     }
+    
     public boolean isDraw() {
-        for (int row = 0; row < ROWS; ++row) {
-            for (int col = 0; col < COLS; ++col) {
+        for (int row = 0; row < 8; ++row) {
+            for (int col = 0; col < 8; ++col) {
                 if (board[row][col] == Seed.EMPTY) {
                     return false;
                 }
@@ -287,29 +276,28 @@ public class Checkers extends JFrame {
         }
         return true;
     }
+    
     public Seed hasWon (Seed theSeed, int rowSelected, int colSelected) {
         int countRed = 0;
         int countBlue = 0;
+        
         for(row = 0; row <= 7; row++) {
             for(col = 0; col <= 7; col++) {
                 if(board[row][col] == Seed.RED) {
                     countRed++;
-                }
-                else if(board[row][col] == Seed.BLUE) {
+                } else if(board[row][col] == Seed.BLUE) {
                     countBlue++;
-                }
-                else {
+                } else {
                     continue;
                 }
             }
         }
+        
         if(countRed == 0) {
             return Seed.BLUE;
-        }
-        else if(countBlue == 0) {
+        } else if(countBlue == 0) {
             return Seed.RED;
-        }
-        else {
+        } else {
             return Seed.EMPTY;
         }
     }
@@ -322,53 +310,47 @@ public class Checkers extends JFrame {
             super.paintComponent(g);
             setBackground(Color.BLACK);
             Graphics2D g2d = (Graphics2D)g;
-            g2d.setStroke(new BasicStroke(SYMBOL_STROKE_WIDTH, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-            for (int row = 0; row < ROWS; ++row) {
-                for (int col = 0; col < COLS; ++col) {
-                    int x1 = col * CELL_SIZE + CELL_PADDING;
-                    int y1 = row * CELL_SIZE + CELL_PADDING;
+            g2d.setStroke(new BasicStroke(8, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+            for (int row = 0; row < 8; ++row) {
+                for (int col = 0; col < 8; ++col) {
+                    int x1 = col * 80 + (80 / 6);
+                    int y1 = row * 80 + (80 / 6);
 
-                    int x2 = col * CELL_SIZE;
-                    int y2 = row * CELL_SIZE;
+                    int x2 = col * 80;
+                    int y2 = row * 80;
                     if (board[row][col] == Seed.EMPTY) {
                         g2d.setColor(Color.LIGHT_GRAY);
-                        for (int cell = 0; cell < CELL; ++cell) {
-                            g2d.fillRect(x2, y2, CELL_SIZE, CELL_SIZE);
+                        for (int8= 0;8< CELL; ++cell) {
+                            g2d.fillRect(x2, y2, 80, 80);
                         }
-                    }
-
-                    else if (board[row][col] == Seed.RED) {
+                    } else if (board[row][col] == Seed.RED) {
                         g2d.setColor(Color.LIGHT_GRAY);
-                        g2d.fillRect(x2, y2, CELL_SIZE, CELL_SIZE);
+                        g2d.fillRect(x2, y2, 80, 80);
                         g2d.setColor(Color.RED);
-                        g2d.fillOval(x1, y1, SYMBOL_SIZE, SYMBOL_SIZE);
-                    }
-                    else if (board[row][col] == Seed.BLUE) {
+                        g2d.fillOval(x1, y1, (80 - (80 / 6) * 2), (80 - (80 / 6) * 2));
+                    } else if (board[row][col] == Seed.BLUE) {
                         g2d.setColor(Color.LIGHT_GRAY);
-                        g2d.fillRect(x2, y2, CELL_SIZE, CELL_SIZE);
+                        g2d.fillRect(x2, y2, 80, 80);
                         g2d.setColor(Color.BLUE);
-                        g2d.fillOval(x1, y1, SYMBOL_SIZE, SYMBOL_SIZE);
+                        g2d.fillOval(x1, y1, (80 - (80 / 6) * 2), (80 - (80 / 6) * 2));
                     }
                 }
             }
+            
             if (currentState == GameState.PLAYING) {
                 statusBar.setForeground(Color.BLUE);
                 if (currentPlayer == Seed.RED) {
                     statusBar.setText("RED's Turn!");
-                }
-                else {
+                } else {
                     statusBar.setText("BLUEs's Turn!");
                 }
-            }
-            else if (currentState == GameState.DRAW) {
+            } else if (currentState == GameState.DRAW) {
                 statusBar.setForeground(Color.RED);
                 statusBar.setText("Draw! Click to Play Again!");
-            }
-            else if (currentState == GameState.RED_WON) {
+            } else if (currentState == GameState.RED_WON) {
                 statusBar.setForeground(Color.RED);
                 statusBar.setText("RED Won! Click to Play Again");
-            }
-            else if (currentState == GameState.BLUE_WON) {
+            } else if (currentState == GameState.BLUE_WON) {
                 statusBar.setForeground(Color.RED);
                 statusBar.setText("BLUE Won! Click to PLay Again!");
             }
