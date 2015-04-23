@@ -56,6 +56,7 @@ public class Checkers extends JFrame {
     public int getRow() {
         return this.row;
     }
+	
     public int getCol() {
         return this.col;
     }
@@ -71,7 +72,7 @@ public class Checkers extends JFrame {
     public Checkers() {
         canvas = new DrawCanvas();
         canvas.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
-
+		
         canvas.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent remove) {
@@ -170,14 +171,12 @@ public class Checkers extends JFrame {
                                 idlePlayer = (currentPlayer == Seed.BLUE) ? Seed.RED : Seed.BLUE;
                             }
                         } else{
-                        board[rowSelected1][colSelected1] = currentPlayer;
-                        updateGame(currentPlayer, rowSelected1, colSelected1);
+                            board[rowSelected1][colSelected1] = currentPlayer;
+                            updateGame(currentPlayer, rowSelected1, colSelected1);
                         
-
-                        currentPlayer = (currentPlayer == Seed.RED) ? Seed.BLUE : Seed.RED;
-                        idlePlayer = (currentPlayer == Seed.BLUE) ? Seed.RED : Seed.BLUE;
+                            currentPlayer = (currentPlayer == Seed.RED) ? Seed.BLUE : Seed.RED;
+                            idlePlayer = (currentPlayer == Seed.BLUE) ? Seed.RED : Seed.BLUE;
                         }
-                        
                     } else {
                         board[mouseY2][mouseX2] = currentPlayer;
                     }
@@ -221,6 +220,7 @@ public class Checkers extends JFrame {
                         board[row][col] = Seed.EMPTY;
                     }
                 }
+				
                 board[0][0] = Seed.RED;
                 board[0][2] = Seed.RED;
                 board[0][4] = Seed.RED;
